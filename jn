@@ -1,0 +1,24 @@
+node('master') 
+{
+    stage('ContDownload') 
+    {
+    git 'https://github.com/selenium-saikrishna/maven.git'
+    }
+    stage('ContBuild') 
+    {
+    sh 'mvn package'
+    }
+ stage('ContDeploy') 
+    {
+    sh 'scp /home/ubuntu/.jenkins/workspace/Pipe/webapp/target/webapp.war ubuntu@172.31.29.87:/var/lib/tomcat7/webapps/qaenv.war'
+    }
+    stage('ContTesting') 
+    {
+    git 'https://github.com/selenium-saikrishna/TestingNew.git'
+    }
+    stage('ContDelivery') 
+    {
+    sh 'scp /home/ubuntu/.jenkins/workspace/Pipe/webapp/target/webapp.war ubuntu@172.31.27.190:/var/lib/tomcat7/webapps/prodenv.war'
+    }
+}
+
